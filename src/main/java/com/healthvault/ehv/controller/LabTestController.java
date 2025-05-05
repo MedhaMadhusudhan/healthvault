@@ -4,8 +4,12 @@ import com.healthvault.ehv.model.LabTest;
 import com.healthvault.ehv.model.TestDetail;
 import com.healthvault.ehv.model.User;
 import com.healthvault.ehv.service.LabTestService;
+import com.healthvault.ehv.service.PDFService;
 import com.healthvault.ehv.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -21,6 +25,9 @@ public class LabTestController {
     @Autowired
     private UserService userService;
 
+    @Autowired
+    private PDFService pdfService;
+
     @GetMapping("/new")
     public String showNewLabTestForm(Model model) {
         model.addAttribute("labTest", new LabTest());
@@ -33,6 +40,12 @@ public class LabTestController {
         String username = authentication.getName();
         User user = userService.findByUsername(username);
         labTest.setUser(user);
+
+        // Ensure bidirectional relationship is properly set
+        if (labTest.getTestDetails() != null) {
+            labTest.getTestDetails().forEach(detail -> detail.setLabTest(labTest));
+        }
+
         labTestService.saveLabTest(labTest);
         return "redirect:/dashboard";
     }
@@ -48,7 +61,13 @@ public class LabTestController {
     public String updateLabTest(@PathVariable Long id, @ModelAttribute LabTest labTest) {
         LabTest existingLabTest = labTestService.getLabTestById(id);
         existingLabTest.setLaboratoryName(labTest.getLaboratoryName());
+
+        // Ensure bidirectional relationship is properly set for each test detail
+        if (labTest.getTestDetails() != null) {
+            labTest.getTestDetails().forEach(detail -> detail.setLabTest(existingLabTest));
+        }
         existingLabTest.setTestDetails(labTest.getTestDetails());
+
         labTestService.saveLabTest(existingLabTest);
         return "redirect:/dashboard";
     }
@@ -57,5 +76,23 @@ public class LabTestController {
     public String deleteLabTest(@PathVariable Long id) {
         labTestService.deleteLabTest(id);
         return "redirect:/dashboard";
+    }
+
+    @GetMapping("/download/{id}")
+    public ResponseEntity<byte[]> downloadLabTestPDF(@PathVariable Long id) {
+        LabTest labTest = labTestService.getLabTestById(id);
+        byte[] pdfContent = pdfService.generateLabTestPDF(labTest);
+
+        String filename = "LabTest_" + labTest.getLaboratoryName().replaceAll("\\s+", "_") + ".pdf";
+
+        HttpHeaders headers = new HttpHeaders();
+        headers.setContentType(MediaType.APPLICATION_PDF);
+        headers.setContentDispositionFormData("attachment", filename);
+        headers.setCacheControl("must-revalidate, post-check=0, pre-check=0");
+
+        return ResponseEntity.ok()
+                .headers(headers)
+                .contentType(MediaType.APPLICATION_PDF)
+                .body(pdfContent);
     }
 }

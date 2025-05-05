@@ -5,28 +5,121 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.9.4/css/bulma.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
     <script defer src="https://use.fontawesome.com/releases/v5.15.4/js/all.js"></script>
     <style>
-        .navbar.is-light-blue {
-            background-color: #EBF5FB;
-            color: #2C3E50;
+        :root {
+            --primary-color: #2C7CD1;
+            --primary-light: #EBF5FB;
+            --primary-dark: #1A5276;
+            --success-color: #27AE60;
+            --warning-color: #F39C12;
+            --danger-color: #E74C3C;
+            --text-color: #2C3E50;
+            --text-light: #7F8C8D;
+            --background-light: #F8FAFC;
         }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            color: var(--text-color);
+            background-color: var(--background-light);
+        }
+
+        .title, .subtitle, h1, h2, h3, h4, h5, h6 {
+            font-family: 'Inter', sans-serif;
+            color: var(--text-color);
+        }
+
+        .navbar.is-light-blue {
+            background-color: white;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.04);
+        }
+
         .navbar.is-light-blue .navbar-brand > a.navbar-item,
         .navbar.is-light-blue .navbar-brand .navbar-link,
         .navbar.is-light-blue .navbar-item {
-            color: #2C3E50;
+            color: var(--text-color);
+            font-weight: 500;
         }
+
         .navbar.is-light-blue .navbar-item:hover {
-            background-color: #D6EAF8 !important;
-            color: #1A5276;
+            background-color: var(--primary-light) !important;
+            color: var(--primary-dark);
         }
+
         .button.is-light-blue {
-            background-color: #D6EAF8;
-            color: #2C3E50;
+            background-color: var(--primary-color);
+            color: white;
+            transition: background-color 0.2s ease;
         }
+
         .button.is-light-blue:hover {
-            background-color: #AED6F1;
-            color: #1A5276;
+            background-color: var(--primary-dark);
+            color: white;
+        }
+
+        .card {
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.04);
+            transition: box-shadow 0.3s ease;
+        }
+
+        .card:hover {
+            box-shadow: 0 4px 8px rgba(0,0,0,0.08);
+        }
+
+        .notification {
+            border-radius: 8px;
+        }
+
+        .notification.is-info {
+            background-color: var(--primary-light);
+            color: var(--primary-dark);
+        }
+
+        .notification.is-success {
+            background-color: #E8F6F3;
+            color: #196F3D;
+        }
+
+        .notification.is-warning {
+            background-color: #FEF5E7;
+            color: #9A7D0A;
+        }
+
+        .notification.is-danger {
+            background-color: #FDEDEC;
+            color: #943126;
+        }
+
+        .input, .textarea {
+            border-radius: 6px;
+            box-shadow: none;
+            border-color: #E2E8F0;
+        }
+
+        .input:focus, .textarea:focus {
+            border-color: var(--primary-color);
+            box-shadow: 0 0 0 2px rgba(44, 124, 209, 0.1);
+        }
+
+        .box {
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.04);
+        }
+
+        .label {
+            color: var(--text-color);
+            font-weight: 500;
+        }
+
+        .help {
+            color: var(--text-light);
+        }
+
+        .section {
+            background-color: var(--background-light);
         }
     </style>
 </head>
