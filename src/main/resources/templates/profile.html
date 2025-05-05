@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head th:replace="~{fragments :: head('Profile - HealthVault')}"></head>
+<body>
+    <div th:replace="~{fragments :: nav}"></div>
+
+    <section class="section">
+        <div class="container">
+            <div class="columns is-centered">
+                <div class="column is-half">
+                    <div class="card">
+                        <header class="card-header">
+                            <p class="card-header-title">Profile Information</p>
+                            <button class="card-header-icon" id="editButton">
+                                <span class="icon">
+                                    <i class="fas fa-edit"></i>
+                                </span>
+                            </button>
+                        </header>
+                        <div class="card-content">
+                            <!-- View Mode -->
+                            <div id="viewMode" class="content">
+                                <div class="field">
+                                    <label class="label">Name</label>
+                                    <p class="subtitle" th:text="${user.name}">John Doe</p>
+                                </div>
+                                
+                                <div class="field">
+                                    <label class="label">Username</label>
+                                    <p class="subtitle" th:text="${user.username}">johndoe</p>
+                                </div>
+                                
+                                <div class="field">
+                                    <label class="label">Email</label>
+                                    <p class="subtitle" th:text="${user.emailAddress}">john@example.com</p>
+                                </div>
+                                
+                                <div class="field">
+                                    <label class="label">Phone Number</label>
+                                    <p class="subtitle" th:text="${user.phoneNumber}">+1234567890</p>
+                                </div>
+                                
+                                <div class="field">
+                                    <label class="label">Blood Group</label>
+                                    <p class="subtitle" th:text="${user.bloodGroup}">A+</p>
+                                </div>
+                            </div>
+
+                            <!-- Edit Mode -->
+                            <div id="editMode" class="content" style="display: none;">
+                                <form th:action="@{/profile/update}" th:object="${user}" method="post">
+                                    <input type="hidden" th:field="*{id}">
+                                    <input type="hidden" th:field="*{username}">
+                                    <input type="hidden" th:field="*{password}">
+                                    
+                                    <div class="field">
+                                        <label class="label">Name</label>
+                                        <div class="control">
+                                            <input class="input" type="text" th:field="*{name}">
+                                        </div>
+                                        <p class="help is-danger" th:if="${#fields.hasErrors('name')}" th:errors="*{name}"></p>
+                                    </div>
+                                    
+                                    <div class="field">
+                                        <label class="label">Email</label>
+                                        <div class="control">
+                                            <input class="input" type="email" th:field="*{emailAddress}">
+                                        </div>
+                                        <p class="help is-danger" th:if="${#fields.hasErrors('emailAddress')}" th:errors="*{emailAddress}"></p>
+                                    </div>
+                                    
+                                    <div class="field">
+                                        <label class="label">Phone Number</label>
+                                        <div class="control">
+                                            <input class="input" type="text" th:field="*{phoneNumber}">
+                                        </div>
+                                        <p class="help is-danger" th:if="${#fields.hasErrors('phoneNumber')}" th:errors="*{phoneNumber}"></p>
+                                    </div>
+                                    
+                                    <div class="field">
+                                        <label class="label">Blood Group</label>
+                                        <div class="control">
+                                            <input class="input" type="text" th:field="*{bloodGroup}">
+                                        </div>
+                                        <p class="help is-danger" th:if="${#fields.hasErrors('bloodGroup')}" th:errors="*{bloodGroup}"></p>
+                                    </div>
+
+                                    <div class="field is-grouped">
+                                        <div class="control">
+                                            <button type="submit" class="button is-primary">Save Changes</button>
+                                        </div>
+                                        <div class="control">
+                                            <button type="button" class="button" id="cancelButton">Cancel</button>
+                                        </div>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <script th:replace="~{fragments :: navbar-script}"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const editButton = document.getElementById('editButton');
+            const cancelButton = document.getElementById('cancelButton');
+            const viewMode = document.getElementById('viewMode');
+            const editMode = document.getElementById('editMode');
+
+            editButton.addEventListener('click', () => {
+                viewMode.style.display = 'none';
+                editMode.style.display = 'block';
+            });
+
+            cancelButton.addEventListener('click', () => {
+                viewMode.style.display = 'block';
+                editMode.style.display = 'none';
+            });
+        });
+    </script>
+</body>
+</html>

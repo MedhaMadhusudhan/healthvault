@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments :: head('About - HealthVault')}"></head>
+<body>
+    <div th:replace="~{fragments :: nav}"></div>
+
+    <section class="section">
+        <div class="container">
+            <div class="content">
+                <h1 class="title">About HealthVault</h1>
+                
+                <div class="box">
+                    <h2 class="subtitle">Our Mission</h2>
+                    <p>
+                        HealthVault is a comprehensive health information management system designed to securely store and manage your personal health records.
+                    </p>
+                </div>
+
+                <div class="box">
+                    <h2 class="subtitle">Features</h2>
+                    <div class="columns">
+                        <div class="column">
+                            <div class="notification is-primary">
+                                <h3 class="subtitle">Secure Storage</h3>
+                                <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nullam in dui mauris. Vivamus hendrerit arcu sed erat molestie vehicula.</p>
+                            </div>
+                        </div>
+                        <div class="column">
+                            <div class="notification is-info">
+                                <h3 class="subtitle">Easy Access</h3>
+                                <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nullam in dui mauris. Vivamus hendrerit arcu sed erat molestie vehicula.</p>
+                            </div>
+                        </div>
+                        <div class="column">
+                            <div class="notification is-success">
+                                <h3 class="subtitle">Data Privacy</h3>
+                                <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nullam in dui mauris. Vivamus hendrerit arcu sed erat molestie vehicula.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="box">
+                    <h2 class="subtitle">How It Works</h2>
+                    <p>
+                        Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nullam in dui mauris. Vivamus hendrerit arcu sed erat molestie vehicula. Sed auctor neque eu tellus rhoncus ut eleifend nibh porttitor. Ut in nulla enim. Phasellus molestie magna non est bibendum non venenatis nisl tempor.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <script th:replace="~{fragments :: navbar-script}"></script>
+</body>
+</html>

@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments :: head('Login - HealthVault')}"></head>
+<body>
+    <nav class="navbar is-light-blue" role="navigation" aria-label="main navigation">
+        <div class="navbar-brand">
+            <a class="navbar-item" href="/">
+                <strong>HealthVault</strong>
+            </a>
+        </div>
+    </nav>
+
+    <section class="section">
+        <div class="container">
+            <div class="columns is-centered">
+                <div class="column is-half">
+                    <div class="box">
+                        <h2 class="title is-3 has-text-centered">Login</h2>
+                        
+                        <div th:if="${param.error}" class="notification is-danger">
+                            Invalid username or password.
+                        </div>
+                        <div th:if="${param.logout}" class="notification is-success">
+                            You have been logged out.
+                        </div>
+                        <div th:if="${param.expired}" class="notification is-warning">
+                            Your session has expired. Please login again.
+                        </div>
+                        
+                        <form th:action="@{/login}" method="post">
+                            <div class="field">
+                                <label class="label">Username</label>
+                                <div class="control has-icons-left">
+                                    <input class="input" type="text" name="username" required>
+                                    <span class="icon is-small is-left">
+                                        <i class="fas fa-user"></i>
+                                    </span>
+                                </div>
+                            </div>
+                            
+                            <div class="field">
+                                <label class="label">Password</label>
+                                <div class="control has-icons-left">
+                                    <input class="input" type="password" name="password" required>
+                                    <span class="icon is-small is-left">
+                                        <i class="fas fa-lock"></i>
+                                    </span>
+                                </div>
+                            </div>
+                            
+                            <div class="field">
+                                <div class="control">
+                                    <button type="submit" class="button is-light-blue is-fullwidth">Login</button>
+                                </div>
+                            </div>
+                        </form>
+                        <p class="has-text-centered mt-4">
+                            Don't have an account? <a th:href="@{/register}">Register here</a>
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <script th:replace="~{fragments :: navbar-script}"></script>
+</body>
+</html>

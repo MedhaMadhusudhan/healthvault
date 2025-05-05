@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head th:replace="~{fragments :: head('Dashboard - HealthVault')}"></head>
+<body>
+    <div th:replace="~{fragments :: nav}"></div>
+
+    <section class="section">
+        <div class="container">
+            <div class="columns">
+                <div class="column is-three-quarters">
+                    <div class="card">
+                        <header class="card-header">
+                            <p class="card-header-title">
+                                Welcome, <span sec:authentication="principal.name" class="ml-2"></span>!
+                            </p>
+                        </header>
+                        <div class="card-content">
+                            <div class="content">
+                                <p class="subtitle">Your Quick Health Summary</p>
+                                <div class="columns">
+                                    <div class="column">
+                                        <div class="notification is-info">
+                                            <p class="heading">Blood Group</p>
+                                            <p class="title" sec:authentication="principal.bloodGroup"></p>
+                                        </div>
+                                    </div>
+                                    <div class="column">
+                                        <div class="notification is-success">
+                                            <p class="heading">Contact</p>
+                                            <p class="subtitle is-6" sec:authentication="principal.phoneNumber"></p>
+                                            <p class="subtitle is-6" sec:authentication="principal.emailAddress"></p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="card mt-4">
+                        <header class="card-header">
+                            <p class="card-header-title">
+                                Quick Actions
+                            </p>
+                        </header>
+                        <div class="card-content">
+                            <div class="buttons">
+                                <a th:href="@{/profile}" class="button is-primary">
+                                    <span class="icon">
+                                        <i class="fas fa-user"></i>
+                                    </span>
+                                    <span>View Profile</span>
+                                </a>
+                                <a th:href="@{/about}" class="button is-info">
+                                    <span class="icon">
+                                        <i class="fas fa-info-circle"></i>
+                                    </span>
+                                    <span>About HealthVault</span>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="column">
+                    <div class="card">
+                        <header class="card-header">
+                            <p class="card-header-title">
+                                Tips
+                            </p>
+                        </header>
+                        <div class="card-content">
+                            <div class="content">
+                                <ul>
+                                    <li>Keep your profile information up to date</li>
+                                    <li>Visit the About page to learn more about features</li>
+                                    <li>Contact support if you need assistance</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <script th:replace="~{fragments :: navbar-script}"></script>
+</body>
+</html>

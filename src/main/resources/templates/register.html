@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments :: head('Register - HealthVault')}"></head>
+<body>
+    <nav class="navbar is-light-blue" role="navigation" aria-label="main navigation">
+        <div class="navbar-brand">
+            <a class="navbar-item" href="/">
+                <strong>HealthVault</strong>
+            </a>
+        </div>
+    </nav>
+
+    <section class="section">
+        <div class="container">
+            <div class="columns is-centered">
+                <div class="column is-half">
+                    <div class="box">
+                        <h2 class="title is-3 has-text-centered">Register</h2>
+                        
+                        <div th:if="${errorMessage}" class="notification is-danger" th:text="${errorMessage}"></div>
+                        
+                        <form th:action="@{/register}" th:object="${user}" method="post">
+                            <div class="field">
+                                <label class="label">Name</label>
+                                <div class="control has-icons-left">
+                                    <input class="input" th:classappend="${#fields.hasErrors('name')} ? 'is-danger'" type="text" th:field="*{name}">
+                                    <span class="icon is-small is-left">
+                                        <i class="fas fa-user"></i>
+                                    </span>
+                                </div>
+                                <p class="help is-danger" th:if="${#fields.hasErrors('name')}" th:errors="*{name}"></p>
+                            </div>
+                            
+                            <div class="field">
+                                <label class="label">Phone Number</label>
+                                <div class="control has-icons-left">
+                                    <input class="input" th:classappend="${#fields.hasErrors('phoneNumber')} ? 'is-danger'" type="text" th:field="*{phoneNumber}" placeholder="+1234567890">
+                                    <span class="icon is-small is-left">
+                                        <i class="fas fa-phone"></i>
+                                    </span>
+                                </div>
+                                <p class="help is-danger" th:if="${#fields.hasErrors('phoneNumber')}" th:errors="*{phoneNumber}"></p>
+                            </div>
+                            
+                            <div class="field">
+                                <label class="label">Email Address</label>
+                                <div class="control has-icons-left">
+                                    <input class="input" th:classappend="${#fields.hasErrors('emailAddress')} ? 'is-danger'" type="email" th:field="*{emailAddress}">
+                                    <span class="icon is-small is-left">
+                                        <i class="fas fa-envelope"></i>
+                                    </span>
+                                </div>
+                                <p class="help is-danger" th:if="${#fields.hasErrors('emailAddress')}" th:errors="*{emailAddress}"></p>
+                            </div>
+                            
+                            <div class="field">
+                                <label class="label">Username</label>
+                                <div class="control has-icons-left">
+                                    <input class="input" th:classappend="${#fields.hasErrors('username')} ? 'is-danger'" type="text" th:field="*{username}">
+                                    <span class="icon is-small is-left">
+                                        <i class="fas fa-user-circle"></i>
+                                    </span>
+                                </div>
+                                <p class="help is-danger" th:if="${#fields.hasErrors('username')}" th:errors="*{username}"></p>
+                            </div>
+                            
+                            <div class="field">
+                                <label class="label">Password</label>
+                                <div class="control has-icons-left">
+                                    <input class="input" th:classappend="${#fields.hasErrors('password')} ? 'is-danger'" type="password" th:field="*{password}">
+                                    <span class="icon is-small is-left">
+                                        <i class="fas fa-lock"></i>
+                                    </span>
+                                </div>
+                                <p class="help is-danger" th:if="${#fields.hasErrors('password')}" th:errors="*{password}"></p>
+                            </div>
+                            
+                            <div class="field">
+                                <label class="label">Blood Group</label>
+                                <div class="control has-icons-left">
+                                    <input class="input" th:classappend="${#fields.hasErrors('bloodGroup')} ? 'is-danger'" type="text" th:field="*{bloodGroup}" placeholder="A+, B-, O+, AB+">
+                                    <span class="icon is-small is-left">
+                                        <i class="fas fa-tint"></i>
+                                    </span>
+                                </div>
+                                <p class="help is-danger" th:if="${#fields.hasErrors('bloodGroup')}" th:errors="*{bloodGroup}"></p>
+                            </div>
+                            
+                            <div class="field">
+                                <div class="control">
+                                    <button type="submit" class="button is-light-blue is-fullwidth">Register</button>
+                                </div>
+                            </div>
+                        </form>
+                        <p class="has-text-centered mt-4">
+                            Already have an account? <a th:href="@{/login}">Login here</a>
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <script th:replace="~{fragments :: navbar-script}"></script>
+</body>
+</html>
