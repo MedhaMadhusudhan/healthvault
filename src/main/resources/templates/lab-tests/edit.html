@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments :: head('Edit Lab Test - HealthVault')}"></head>
+<body>
+    <div th:replace="~{fragments :: nav}"></div>
+    
+    <section class="section">
+        <div class="container">
+            <h2 class="title is-3">Edit Lab Test</h2>
+            <form th:action="@{/lab-tests/update/{id}(id=${labTest.id})}" th:object="${labTest}" method="post" id="labTestForm">
+                <div class="field">
+                    <label class="label" for="laboratoryName">Laboratory Name</label>
+                    <div class="control">
+                        <input class="input" type="text" id="laboratoryName" th:field="*{laboratoryName}" required>
+                    </div>
+                </div>
+
+                <div id="testDetailsContainer">
+                    <div th:each="detail, stat : *{testDetails}" class="test-detail-entry box mt-4">
+                        <div class="is-flex is-justify-content-space-between">
+                            <h4 class="title is-5" th:if="${stat.index == 0}">Test Details</h4>
+                            <button th:if="${stat.index > 0}" type="button" class="delete" 
+                                    onclick="removeTestDetail(this)"></button>
+                        </div>
+                        <div class="field">
+                            <label class="label">Test Name</label>
+                            <div class="control">
+                                <input class="input" type="text" 
+                                       th:field="*{testDetails[__${stat.index}__].testName}" required>
+                            </div>
+                        </div>
+                        <div class="field">
+                            <label class="label">Description</label>
+                            <div class="control">
+                                <textarea class="textarea" 
+                                        th:field="*{testDetails[__${stat.index}__].description}" rows="3"></textarea>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="field is-grouped mt-5">
+                    <div class="control">
+                        <button type="button" class="button is-info" onclick="addTestDetail()">Add Another Test</button>
+                    </div>
+                    <div class="control">
+                        <button type="submit" class="button is-primary">Update Lab Test</button>
+                    </div>
+                    <div class="control">
+                        <a th:href="@{/dashboard}" class="button is-light">Cancel</a>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </section>
+
+    <script th:inline="javascript">
+        const testDetailCount = /*[[${labTest.testDetails.size()}]]*/ 0;
+        let currentCount = testDetailCount;
+        
+        function addTestDetail() {
+            const container = document.getElementById('testDetailsContainer');
+            const newEntry = document.createElement('div');
+            newEntry.className = 'test-detail-entry box mt-4';
+            newEntry.innerHTML = `
+                <div class="is-flex is-justify-content-space-between">
+                    <h4 class="title is-5">Test Details</h4>
+                    <button type="button" class="delete" onclick="removeTestDetail(this)"></button>
+                </div>
+                <div class="field">
+                    <label class="label">Test Name</label>
+                    <div class="control">
+                        <input class="input" type="text" 
+                               name="testDetails[${currentCount}].testName" required>
+                    </div>
+                </div>
+                <div class="field">
+                    <label class="label">Description</label>
+                    <div class="control">
+                        <textarea class="textarea" 
+                                name="testDetails[${currentCount}].description" rows="3"></textarea>
+                    </div>
+                </div>
+            `;
+            container.appendChild(newEntry);
+            currentCount++;
+        }
+
+        function removeTestDetail(button) {
+            button.closest('.test-detail-entry').remove();
+        }
+    </script>
+</body>
+</html>

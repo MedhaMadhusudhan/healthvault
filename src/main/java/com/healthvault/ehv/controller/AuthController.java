@@ -1,8 +1,11 @@
 package com.healthvault.ehv.controller;
 
 import com.healthvault.ehv.model.User;
+import com.healthvault.ehv.security.CustomUserDetails;
 import com.healthvault.ehv.service.UserService;
+import com.healthvault.ehv.service.LabTestService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -11,13 +14,15 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import jakarta.validation.Valid;
-import java.security.Principal;
 
 @Controller
 public class AuthController {
 
     @Autowired
     private UserService userService;
+
+    @Autowired
+    private LabTestService labTestService;
 
     @GetMapping("/register")
     public String showRegistrationForm(Model model) {
@@ -60,29 +65,32 @@ public class AuthController {
     }
 
     @GetMapping("/dashboard")
-    public String dashboard(Model model, Principal principal) {
-        if (principal == null) {
+    public String dashboard(Model model, Authentication authentication) {
+        if (authentication == null) {
             return "redirect:/login";
         }
-        User user = userService.findByUsername(principal.getName());
+        CustomUserDetails userDetails = (CustomUserDetails) authentication.getPrincipal();
+        User user = userDetails.getUser();
         model.addAttribute("user", user);
+        model.addAttribute("labTests", labTestService.getLabTestsByUser(user));
         return "dashboard";
     }
 
     @GetMapping("/")
-    public String home(Principal principal) {
-        if (principal != null) {
+    public String home(Authentication authentication) {
+        if (authentication != null) {
             return "redirect:/dashboard";
         }
         return "redirect:/login";
     }
 
     @GetMapping("/profile")
-    public String profile(Model model, Principal principal) {
-        if (principal == null) {
+    public String profile(Model model, Authentication authentication) {
+        if (authentication == null) {
             return "redirect:/login";
         }
-        User user = userService.findByUsername(principal.getName());
+        CustomUserDetails userDetails = (CustomUserDetails) authentication.getPrincipal();
+        User user = userDetails.getUser();
         model.addAttribute("user", user);
         return "profile";
     }
@@ -91,14 +99,15 @@ public class AuthController {
     public String updateProfile(@Valid @ModelAttribute("user") User user, 
                               BindingResult result, 
                               Model model,
-                              Principal principal,
+                              Authentication authentication,
                               RedirectAttributes redirectAttributes) {
         if (result.hasErrors()) {
             return "profile";
         }
 
         try {
-            User currentUser = userService.findByUsername(principal.getName());
+            CustomUserDetails userDetails = (CustomUserDetails) authentication.getPrincipal();
+            User currentUser = userDetails.getUser();
             user.setPassword(currentUser.getPassword()); // Preserve the existing password
             userService.updateUser(user);
             redirectAttributes.addFlashAttribute("successMessage", "Profile updated successfully!");

@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments :: head('Add Lab Test - HealthVault')}"></head>
+<body>
+    <div th:replace="~{fragments :: nav}"></div>
+    
+    <section class="section">
+        <div class="container">
+            <h2 class="title is-3">Add New Lab Test</h2>
+            <form th:action="@{/lab-tests/save}" th:object="${labTest}" method="post" id="labTestForm">
+                <div class="field">
+                    <label class="label" for="laboratoryName">Laboratory Name</label>
+                    <div class="control">
+                        <input class="input" type="text" id="laboratoryName" th:field="*{laboratoryName}" required>
+                    </div>
+                </div>
+
+                <div id="testDetailsContainer">
+                    <div class="test-detail-entry box">
+                        <h4 class="title is-5">Test Details</h4>
+                        <div class="field">
+                            <label class="label">Test Name</label>
+                            <div class="control">
+                                <input class="input" type="text" name="testDetails[0].testName" required>
+                            </div>
+                        </div>
+                        <div class="field">
+                            <label class="label">Description</label>
+                            <div class="control">
+                                <textarea class="textarea" name="testDetails[0].description" rows="3"></textarea>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="field is-grouped mt-5">
+                    <div class="control">
+                        <button type="button" class="button is-info" onclick="addTestDetail()">Add Another Test</button>
+                    </div>
+                    <div class="control">
+                        <button type="submit" class="button is-primary">Save Lab Test</button>
+                    </div>
+                    <div class="control">
+                        <a th:href="@{/dashboard}" class="button is-light">Cancel</a>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </section>
+
+    <script>
+        let testDetailCount = 1;
+        
+        function addTestDetail() {
+            const container = document.getElementById('testDetailsContainer');
+            const newEntry = document.createElement('div');
+            newEntry.className = 'test-detail-entry box mt-5';
+            newEntry.innerHTML = `
+                <div class="is-flex is-justify-content-space-between">
+                    <h4 class="title is-5">Test Details</h4>
+                    <button type="button" class="delete" onclick="removeTestDetail(this)"></button>
+                </div>
+                <div class="field">
+                    <label class="label">Test Name</label>
+                    <div class="control">
+                        <input class="input" type="text" name="testDetails[${testDetailCount}].testName" required>
+                    </div>
+                </div>
+                <div class="field">
+                    <label class="label">Description</label>
+                    <div class="control">
+                        <textarea class="textarea" name="testDetails[${testDetailCount}].description" rows="3"></textarea>
+                    </div>
+                </div>
+            `;
+            container.appendChild(newEntry);
+            testDetailCount++;
+        }
+
+        function removeTestDetail(button) {
+            button.closest('.test-detail-entry').remove();
+        }
+    </script>
+</body>
+</html>
