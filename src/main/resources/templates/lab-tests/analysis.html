@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments :: head('Lab Test Analysis - HealthVault')}"></head>
+<body>
+    <div th:replace="~{fragments :: nav}"></div>
+    
+    <section class="section">
+        <div class="container">
+            <div class="columns">
+                <div class="column is-8 is-offset-2">
+                    <nav class="breadcrumb" aria-label="breadcrumbs">
+                        <ul>
+                            <li><a th:href="@{/dashboard}">Dashboard</a></li>
+                            <li class="is-active"><a href="#" aria-current="page">Analysis</a></li>
+                        </ul>
+                    </nav>
+
+                    <div class="card">
+                        <header class="card-header">
+                            <p class="card-header-title">
+                                Lab Test Analysis - <span th:text="${labTest.laboratoryName}"></span>
+                            </p>
+                        </header>
+                        <div class="card-content">
+                            <div class="content">
+                                <h3 class="title is-4">Test Details</h3>
+                                <div class="box">
+                                    <div th:each="detail, stat : ${labTest.testDetails}" class="mb-5">
+                                        <p class="subtitle is-5 mb-2" th:text="${detail.testName}">Test Name</p>
+                                        <p class="has-text-grey" th:text="${detail.description}">Description</p>
+                                        <hr th:if="${!stat.last}" class="my-4">
+                                    </div>
+                                </div>
+
+                                <h3 class="title is-4 mt-5">Key Findings</h3>
+                                <div class="box">
+                                    <div class="content has-text-left">
+                                        <pre style="background: none; border: none; padding: 0; font-family: inherit; white-space: pre-wrap;" th:text="${analysis.analysis}">Analysis content</pre>
+                                    </div>
+                                </div>
+
+                                <h3 class="title is-4 mt-5">Recommendations</h3>
+                                <div class="box">
+                                    <div class="content has-text-left">
+                                        <pre style="background: none; border: none; padding: 0; font-family: inherit; white-space: pre-wrap;" th:text="${analysis.suggestions}">Suggestions content</pre>
+                                    </div>
+                                </div>
+
+                                <p class="has-text-grey is-size-7 mt-4">
+                                    Report generated on: <span th:text="${#temporals.format(analysis.createdAt, 'dd-MM-yyyy HH:mm')}">Date</span>
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="buttons is-centered mt-5">
+                        <a th:href="@{/dashboard}" class="button is-light">
+                            Back to Dashboard
+                        </a>
+                        <a th:href="@{/lab-tests/download/{id}(id=${labTest.id})}" class="button is-primary">
+                            <span class="icon">
+                                <i class="fas fa-download"></i>
+                            </span>
+                            <span>Download PDF</span>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <script th:replace="~{fragments :: navbar-script}"></script>
+</body>
+</html>

@@ -76,6 +76,12 @@
                                         </span>
                                         <span>Edit</span>
                                     </a>
+                                    <a th:href="@{/lab-tests/analyze/{id}(id=${test.id})}" class="button is-warning">
+                                        <span class="icon">
+                                            <i class="fas fa-microscope"></i>
+                                        </span>
+                                        <span>Analyze</span>
+                                    </a>
                                     <a th:href="@{/lab-tests/download/{id}(id=${test.id})}" 
                                        class="button is-success"
                                        target="_blank">

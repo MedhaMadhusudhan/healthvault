@@ -1,8 +1,10 @@
 package com.healthvault.ehv.controller;
 
+import com.healthvault.ehv.model.Analysis;
 import com.healthvault.ehv.model.LabTest;
 import com.healthvault.ehv.model.TestDetail;
 import com.healthvault.ehv.model.User;
+import com.healthvault.ehv.service.AnalysisService;
 import com.healthvault.ehv.service.LabTestService;
 import com.healthvault.ehv.service.PDFService;
 import com.healthvault.ehv.service.UserService;
@@ -27,6 +29,9 @@ public class LabTestController {
 
     @Autowired
     private PDFService pdfService;
+
+    @Autowired
+    private AnalysisService analysisService;
 
     @GetMapping("/new")
     public String showNewLabTestForm(Model model) {
@@ -94,5 +99,14 @@ public class LabTestController {
                 .headers(headers)
                 .contentType(MediaType.APPLICATION_PDF)
                 .body(pdfContent);
+    }
+
+    @GetMapping("/analyze/{id}")
+    public String analyzeLabTest(@PathVariable Long id, Model model) {
+        LabTest labTest = labTestService.getLabTestById(id);
+        Analysis analysis = analysisService.generateAnalysis(labTest);
+        model.addAttribute("analysis", analysis);
+        model.addAttribute("labTest", labTest);
+        return "lab-tests/analysis";
     }
 }
