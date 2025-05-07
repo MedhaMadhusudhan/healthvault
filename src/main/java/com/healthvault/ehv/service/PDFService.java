@@ -9,6 +9,9 @@ import com.itextpdf.layout.element.Paragraph;
 import com.itextpdf.layout.element.Table;
 import com.itextpdf.layout.properties.TextAlignment;
 import com.itextpdf.layout.properties.UnitValue;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import java.io.ByteArrayOutputStream;
@@ -72,5 +75,27 @@ public class PDFService {
         } catch (Exception e) {
             throw new RuntimeException("Failed to generate PDF", e);
         }
+    }
+    
+    /**
+     * Generate and return a ResponseEntity with the PDF content for a lab test
+     * 
+     * @param labTest The lab test to generate a PDF for
+     * @return ResponseEntity with PDF content
+     */
+    public ResponseEntity<byte[]> generateLabTestPDFResponse(LabTest labTest) {
+        byte[] pdfContent = generateLabTestPDF(labTest);
+
+        String filename = "LabTest_" + labTest.getLaboratoryName().replaceAll("\\s+", "_") + ".pdf";
+
+        HttpHeaders headers = new HttpHeaders();
+        headers.setContentType(MediaType.APPLICATION_PDF);
+        headers.setContentDispositionFormData("attachment", filename);
+        headers.setCacheControl("must-revalidate, post-check=0, pre-check=0");
+
+        return ResponseEntity.ok()
+                .headers(headers)
+                .contentType(MediaType.APPLICATION_PDF)
+                .body(pdfContent);
     }
 }

@@ -4,6 +4,8 @@ import com.healthvault.ehv.model.User;
 import com.healthvault.ehv.security.CustomUserDetails;
 import com.healthvault.ehv.service.UserService;
 import com.healthvault.ehv.service.LabTestService;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
@@ -17,6 +19,8 @@ import jakarta.validation.Valid;
 
 @Controller
 public class AuthController {
+
+    private static final Logger logger = LoggerFactory.getLogger(AuthController.class);
 
     @Autowired
     private UserService userService;
@@ -69,10 +73,25 @@ public class AuthController {
         if (authentication == null) {
             return "redirect:/login";
         }
+        
         CustomUserDetails userDetails = (CustomUserDetails) authentication.getPrincipal();
         User user = userDetails.getUser();
+        
+        logger.debug("Loading dashboard for user: {}", user.getUsername());
+        
         model.addAttribute("user", user);
-        model.addAttribute("labTests", labTestService.getLabTestsByUser(user));
+        
+        // Add role-specific data
+        if (user.getRole() == User.Role.DOCTOR) {
+            model.addAttribute("patients", userService.findAllPatients());
+            logger.debug("Loaded dashboard for doctor");
+        } else {
+            // Only load lab tests for patients
+            model.addAttribute("labTests", labTestService.getLabTestsByUser(user));
+            model.addAttribute("doctors", userService.findAllDoctors());
+            logger.debug("Loaded dashboard for patient");
+        }
+        
         return "dashboard";
     }
 
@@ -89,9 +108,12 @@ public class AuthController {
         if (authentication == null) {
             return "redirect:/login";
         }
+        
         CustomUserDetails userDetails = (CustomUserDetails) authentication.getPrincipal();
         User user = userDetails.getUser();
+        
         model.addAttribute("user", user);
+        
         return "profile";
     }
 

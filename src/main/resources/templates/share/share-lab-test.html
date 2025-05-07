@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Share Lab Test - HealthVault</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.2/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+    <style>
+        .form-container {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 30px 20px;
+        }
+        .card {
+            border-radius: 10px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+        }
+        .card-header {
+            border-top-left-radius: 10px !important;
+            border-top-right-radius: 10px !important;
+        }
+        .lab-info {
+            background-color: #f8f9fa;
+            border-radius: 8px;
+            padding: 15px;
+            margin-bottom: 20px;
+        }
+    </style>
+</head>
+<body>
+    <!-- Header Fragment -->
+    <div th:replace="~{fragments :: header}"></div>
+
+    <div class="container mt-4 form-container">
+        <div class="alert alert-danger" th:if="${errorMessage}" th:text="${errorMessage}"></div>
+        
+        <div class="d-flex justify-content-between align-items-center mb-4">
+            <h2><i class="fas fa-share-alt me-2"></i>Share Lab Test with Doctor</h2>
+            <a th:href="@{'/lab-tests/view/' + ${labTest.id}}" class="btn btn-outline-secondary">
+                <i class="fas fa-arrow-left me-1"></i> Back to Lab Test
+            </a>
+        </div>
+        
+        <div class="card mb-4">
+            <div class="card-header bg-primary text-white">
+                <h4 class="mb-0">Lab Test Information</h4>
+            </div>
+            <div class="card-body">
+                <div class="lab-info">
+                    <h5 class="mb-3" th:text="${labTest.laboratoryName}">Laboratory Name</h5>
+                    <p>This lab test has <span th:text="${#lists.size(labTest.testDetails)}">0</span> test result(s).</p>
+                </div>
+                
+                <form th:action="@{/share/lab-test}" th:object="${shareLabTestDTO}" method="post">
+                    <input type="hidden" th:field="*{labTestId}" />
+                    
+                    <div class="mb-3">
+                        <label for="doctorId" class="form-label">Select Doctor:</label>
+                        <select th:field="*{doctorId}" class="form-select" required>
+                            <option value="">-- Select Doctor --</option>
+                            <option th:each="doctor : ${doctors}" 
+                                    th:value="${doctor.id}" 
+                                    th:text="${doctor.name + ' (' + doctor.specialty + ')'}">
+                                    Doctor Name (Specialty)
+                            </option>
+                        </select>
+                    </div>
+                    
+                    <div class="mb-3">
+                        <label for="message" class="form-label">Message to Doctor (Optional):</label>
+                        <textarea th:field="*{message}" class="form-control" rows="3" 
+                                  placeholder="Add a message to the doctor about this lab test"></textarea>
+                    </div>
+                    
+                    <div class="mb-3">
+                        <label class="form-label d-block">Access Duration:</label>
+                        <div class="form-check form-check-inline">
+                            <input class="form-check-input" type="radio" name="duration" id="duration1" value="unlimited" checked>
+                            <label class="form-check-label" for="duration1">Unlimited</label>
+                        </div>
+                        <div class="form-check form-check-inline">
+                            <input class="form-check-input" type="radio" name="duration" id="duration2" value="limited">
+                            <label class="form-check-label" for="duration2">Limited Time</label>
+                        </div>
+                    </div>
+                    
+                    <div id="expiryDateContainer" class="mb-3 d-none">
+                        <label for="expiryDate" class="form-label">Access Until:</label>
+                        <input type="date" name="expiryDate" id="expiryDate" class="form-control" />
+                    </div>
+                    
+                    <div class="d-grid gap-2">
+                        <button type="submit" class="btn btn-primary">
+                            <i class="fas fa-share-alt me-2"></i>Share with Doctor
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+    
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.2/js/bootstrap.bundle.min.js"></script>
+    <script>
+        // Show/hide expiry date based on duration selection
+        document.addEventListener('DOMContentLoaded', function() {
+            const durationType = document.querySelectorAll('input[name="duration"]');
+            const expiryContainer = document.getElementById('expiryDateContainer');
+            
+            // Set minimum date to today
+            const today = new Date();
+            const formattedDate = today.toISOString().split('T')[0]; // Format as YYYY-MM-DD
+            const expiryDateInput = document.getElementById('expiryDate');
+            expiryDateInput.min = formattedDate;
+            
+            // Set default date to 30 days from now
+            const defaultDate = new Date();
+            defaultDate.setDate(defaultDate.getDate() + 30);
+            expiryDateInput.value = defaultDate.toISOString().split('T')[0];
+            
+            durationType.forEach(function(radio) {
+                radio.addEventListener('change', function() {
+                    if (this.value === 'limited') {
+                        expiryContainer.classList.remove('d-none');
+                    } else {
+                        expiryContainer.classList.add('d-none');
+                        expiryDateInput.value = '';
+                    }
+                });
+            });
+        });
+    </script>
+</body>
+</html> 

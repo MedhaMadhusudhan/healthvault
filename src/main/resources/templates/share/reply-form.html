@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Reply to Shared Lab Test</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+</head>
+<body>
+    <div th:replace="~{fragments :: header}"></div>
+    
+    <div class="container my-5">
+        <div class="row justify-content-center">
+            <div class="col-md-8">
+                <div class="card">
+                    <div class="card-header bg-primary text-white">
+                        <h3 class="mb-0"><i class="fas fa-reply"></i> Reply to Shared Lab Test</h3>
+                    </div>
+                    <div class="card-body">
+                        <div class="alert alert-info">
+                            <h5>Lab Test Details</h5>
+                            <p><strong>Patient:</strong> <span th:text="${sharedLabTest.patient.name}"></span></p>
+                            <p><strong>Lab Name:</strong> <span th:text="${sharedLabTest.labTest.laboratoryName}"></span></p>
+                            <p><strong>Date Shared:</strong> <span th:text="${#temporals.format(sharedLabTest.sharedDate, 'dd MMM yyyy, hh:mm a')}"></span></p>
+                        </div>
+                        
+                        <div class="mb-4 mt-3">
+                            <h5><i class="fas fa-comment"></i> Patient's Message:</h5>
+                            <div class="patient-message p-3 rounded bg-light">
+                                <p th:text="${sharedLabTest.message ?: 'No message provided by patient'}"></p>
+                            </div>
+                        </div>
+                        
+                        <form th:action="@{/share/reply}" method="post" th:object="${replyDTO}">
+                            <input type="hidden" th:field="*{sharedLabTestId}">
+                            
+                            <div class="form-group mb-3">
+                                <label for="reply" class="form-label"><i class="fas fa-pen"></i> Your Reply:</label>
+                                <textarea th:field="*{reply}" class="form-control" rows="5" required></textarea>
+                                <div class="text-danger" th:if="${#fields.hasErrors('reply')}" th:errors="*{reply}"></div>
+                            </div>
+                            
+                            <div class="d-flex justify-content-between">
+                                <a th:href="@{/share/shared-with-me}" class="btn btn-secondary">
+                                    <i class="fas fa-times"></i> Cancel
+                                </a>
+                                <button type="submit" class="btn btn-primary">
+                                    <i class="fas fa-save"></i> Save Reply
+                                </button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html> 

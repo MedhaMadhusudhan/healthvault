@@ -2,9 +2,7 @@ package com.healthvault.ehv.model;
 
 import jakarta.persistence.*;
 import jakarta.validation.constraints.*;
-import lombok.Data;
 
-@Data
 @Entity
 @Table(name = "users", uniqueConstraints = {
     @UniqueConstraint(columnNames = "username")
@@ -48,4 +46,111 @@ public class User {
     
     @Column(name = "active")
     private boolean active = true;
+    
+    @NotNull(message = "Role is required")
+    @Enumerated(EnumType.STRING)
+    @Column(name = "role")
+    private Role role;
+    
+    // Add license number for doctors
+    @Column(name = "license_number")
+    private String licenseNumber;
+    
+    // Add specialty for doctors
+    @Column(name = "specialty")
+    private String specialty;
+    
+    public enum Role {
+        PATIENT,
+        DOCTOR
+    }
+
+    // Getters and Setters
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public String getPhoneNumber() {
+        return phoneNumber;
+    }
+
+    public void setPhoneNumber(String phoneNumber) {
+        this.phoneNumber = phoneNumber;
+    }
+
+    public String getEmailAddress() {
+        return emailAddress;
+    }
+
+    public void setEmailAddress(String emailAddress) {
+        this.emailAddress = emailAddress;
+    }
+
+    public String getUsername() {
+        return username;
+    }
+
+    public void setUsername(String username) {
+        this.username = username;
+    }
+
+    public String getPassword() {
+        return password;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
+    }
+
+    public String getBloodGroup() {
+        return bloodGroup;
+    }
+
+    public void setBloodGroup(String bloodGroup) {
+        this.bloodGroup = bloodGroup;
+    }
+
+    public boolean isActive() {
+        return active;
+    }
+
+    public void setActive(boolean active) {
+        this.active = active;
+    }
+
+    public Role getRole() {
+        return role;
+    }
+
+    public void setRole(Role role) {
+        this.role = role;
+    }
+
+    public String getLicenseNumber() {
+        return licenseNumber;
+    }
+
+    public void setLicenseNumber(String licenseNumber) {
+        this.licenseNumber = licenseNumber;
+    }
+
+    public String getSpecialty() {
+        return specialty;
+    }
+
+    public void setSpecialty(String specialty) {
+        this.specialty = specialty;
+    }
 }

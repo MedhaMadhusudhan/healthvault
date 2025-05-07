@@ -1,108 +1,120 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
-<head th:replace="~{fragments :: head('Profile - HealthVault')}"></head>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Profile - HealthVault</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.2/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+    <style>
+        .profile-container {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 30px 20px;
+        }
+        .card {
+            border-radius: 10px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+            margin-bottom: 20px;
+        }
+        .card-header {
+            border-top-left-radius: 10px !important;
+            border-top-right-radius: 10px !important;
+        }
+        .field-label {
+            font-weight: 500;
+            color: #6c757d;
+        }
+        .field-value {
+            font-size: 1.1rem;
+            margin-bottom: 1rem;
+        }
+    </style>
+</head>
 <body>
-    <div th:replace="~{fragments :: nav}"></div>
+    <div th:replace="~{fragments :: header}"></div>
 
-    <section class="section">
-        <div class="container">
-            <div class="columns is-centered">
-                <div class="column is-half">
-                    <div class="card">
-                        <header class="card-header">
-                            <p class="card-header-title">Profile Information</p>
-                            <button class="card-header-icon" id="editButton">
-                                <span class="icon">
-                                    <i class="fas fa-edit"></i>
-                                </span>
-                            </button>
-                        </header>
-                        <div class="card-content">
-                            <!-- View Mode -->
-                            <div id="viewMode" class="content">
-                                <div class="field">
-                                    <label class="label">Name</label>
-                                    <p class="subtitle" th:text="${user.name}">John Doe</p>
-                                </div>
-                                
-                                <div class="field">
-                                    <label class="label">Username</label>
-                                    <p class="subtitle" th:text="${user.username}">johndoe</p>
-                                </div>
-                                
-                                <div class="field">
-                                    <label class="label">Email</label>
-                                    <p class="subtitle" th:text="${user.emailAddress}">john@example.com</p>
-                                </div>
-                                
-                                <div class="field">
-                                    <label class="label">Phone Number</label>
-                                    <p class="subtitle" th:text="${user.phoneNumber}">+1234567890</p>
-                                </div>
-                                
-                                <div class="field">
-                                    <label class="label">Blood Group</label>
-                                    <p class="subtitle" th:text="${user.bloodGroup}">A+</p>
-                                </div>
-                            </div>
-
-                            <!-- Edit Mode -->
-                            <div id="editMode" class="content" style="display: none;">
-                                <form th:action="@{/profile/update}" th:object="${user}" method="post">
-                                    <input type="hidden" th:field="*{id}">
-                                    <input type="hidden" th:field="*{username}">
-                                    <input type="hidden" th:field="*{password}">
-                                    
-                                    <div class="field">
-                                        <label class="label">Name</label>
-                                        <div class="control">
-                                            <input class="input" type="text" th:field="*{name}">
-                                        </div>
-                                        <p class="help is-danger" th:if="${#fields.hasErrors('name')}" th:errors="*{name}"></p>
-                                    </div>
-                                    
-                                    <div class="field">
-                                        <label class="label">Email</label>
-                                        <div class="control">
-                                            <input class="input" type="email" th:field="*{emailAddress}">
-                                        </div>
-                                        <p class="help is-danger" th:if="${#fields.hasErrors('emailAddress')}" th:errors="*{emailAddress}"></p>
-                                    </div>
-                                    
-                                    <div class="field">
-                                        <label class="label">Phone Number</label>
-                                        <div class="control">
-                                            <input class="input" type="text" th:field="*{phoneNumber}">
-                                        </div>
-                                        <p class="help is-danger" th:if="${#fields.hasErrors('phoneNumber')}" th:errors="*{phoneNumber}"></p>
-                                    </div>
-                                    
-                                    <div class="field">
-                                        <label class="label">Blood Group</label>
-                                        <div class="control">
-                                            <input class="input" type="text" th:field="*{bloodGroup}">
-                                        </div>
-                                        <p class="help is-danger" th:if="${#fields.hasErrors('bloodGroup')}" th:errors="*{bloodGroup}"></p>
-                                    </div>
-
-                                    <div class="field is-grouped">
-                                        <div class="control">
-                                            <button type="submit" class="button is-primary">Save Changes</button>
-                                        </div>
-                                        <div class="control">
-                                            <button type="button" class="button" id="cancelButton">Cancel</button>
-                                        </div>
-                                    </div>
-                                </form>
-                            </div>
-                        </div>
+    <div class="container profile-container">
+        <div class="alert alert-success" th:if="${success}" th:text="${success}"></div>
+        
+        <div class="card">
+            <div class="card-header bg-primary text-white d-flex justify-content-between align-items-center">
+                <h4 class="mb-0">Profile Information</h4>
+                <button class="btn btn-light btn-sm" id="editButton">
+                    <i class="fas fa-edit me-1"></i> Edit
+                </button>
+            </div>
+            <div class="card-body">
+                <!-- View Mode -->
+                <div id="viewMode">
+                    <div class="row mb-3">
+                        <div class="col-md-4 field-label">Name</div>
+                        <div class="col-md-8 field-value" th:text="${user.name}">John Doe</div>
                     </div>
+                    
+                    <div class="row mb-3">
+                        <div class="col-md-4 field-label">Username</div>
+                        <div class="col-md-8 field-value" th:text="${user.username}">johndoe</div>
+                    </div>
+                    
+                    <div class="row mb-3">
+                        <div class="col-md-4 field-label">Email</div>
+                        <div class="col-md-8 field-value" th:text="${user.emailAddress}">john@example.com</div>
+                    </div>
+                    
+                    <div class="row mb-3">
+                        <div class="col-md-4 field-label">Phone Number</div>
+                        <div class="col-md-8 field-value" th:text="${user.phoneNumber}">+1234567890</div>
+                    </div>
+                    
+                    <div class="row">
+                        <div class="col-md-4 field-label">Blood Group</div>
+                        <div class="col-md-8 field-value" th:text="${user.bloodGroup}">A+</div>
+                    </div>
+                </div>
+
+                <!-- Edit Mode -->
+                <div id="editMode" style="display: none;">
+                    <form th:action="@{/profile/update}" th:object="${user}" method="post">
+                        <input type="hidden" th:field="*{id}">
+                        <input type="hidden" th:field="*{username}">
+                        <input type="hidden" th:field="*{password}">
+                        
+                        <div class="mb-3">
+                            <label for="name" class="form-label">Name</label>
+                            <input type="text" class="form-control" id="name" th:field="*{name}">
+                            <div class="text-danger" th:if="${#fields.hasErrors('name')}" th:errors="*{name}"></div>
+                        </div>
+                        
+                        <div class="mb-3">
+                            <label for="email" class="form-label">Email</label>
+                            <input type="email" class="form-control" id="email" th:field="*{emailAddress}">
+                            <div class="text-danger" th:if="${#fields.hasErrors('emailAddress')}" th:errors="*{emailAddress}"></div>
+                        </div>
+                        
+                        <div class="mb-3">
+                            <label for="phoneNumber" class="form-label">Phone Number</label>
+                            <input type="text" class="form-control" id="phoneNumber" th:field="*{phoneNumber}">
+                            <div class="text-danger" th:if="${#fields.hasErrors('phoneNumber')}" th:errors="*{phoneNumber}"></div>
+                        </div>
+                        
+                        <div class="mb-3">
+                            <label for="bloodGroup" class="form-label">Blood Group</label>
+                            <input type="text" class="form-control" id="bloodGroup" th:field="*{bloodGroup}">
+                            <div class="text-danger" th:if="${#fields.hasErrors('bloodGroup')}" th:errors="*{bloodGroup}"></div>
+                        </div>
+
+                        <div class="d-flex">
+                            <button type="submit" class="btn btn-primary me-2">Save Changes</button>
+                            <button type="button" class="btn btn-secondary" id="cancelButton">Cancel</button>
+                        </div>
+                    </form>
                 </div>
             </div>
         </div>
-    </section>
+    </div>
 
-    <script th:replace="~{fragments :: navbar-script}"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.2/js/bootstrap.bundle.min.js"></script>
     <script>
         document.addEventListener('DOMContentLoaded', () => {
             const editButton = document.getElementById('editButton');

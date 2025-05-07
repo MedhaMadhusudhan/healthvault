@@ -1,106 +1,169 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
-<head th:replace="~{fragments :: head('Register - HealthVault')}"></head>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Register - HealthVault</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.2/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+    <style>
+        .register-container {
+            max-width: 600px;
+            margin: 30px auto;
+        }
+        .card {
+            border-radius: 10px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+        }
+        .card-header {
+            border-top-left-radius: 10px !important;
+            border-top-right-radius: 10px !important;
+        }
+    </style>
+</head>
 <body>
-    <nav class="navbar is-light-blue" role="navigation" aria-label="main navigation">
-        <div class="navbar-brand">
-            <a class="navbar-item" href="/">
-                <strong>HealthVault</strong>
-            </a>
+    <!-- Use simple navbar for register page -->
+    <nav class="navbar navbar-expand-lg navbar-light bg-light shadow-sm">
+        <div class="container">
+            <a class="navbar-brand fw-bold" th:href="@{/}">HealthVault</a>
         </div>
     </nav>
 
-    <section class="section">
-        <div class="container">
-            <div class="columns is-centered">
-                <div class="column is-half">
-                    <div class="box">
-                        <h2 class="title is-3 has-text-centered">Register</h2>
-                        
-                        <div th:if="${errorMessage}" class="notification is-danger" th:text="${errorMessage}"></div>
-                        
-                        <form th:action="@{/register}" th:object="${user}" method="post">
-                            <div class="field">
-                                <label class="label">Name</label>
-                                <div class="control has-icons-left">
-                                    <input class="input" th:classappend="${#fields.hasErrors('name')} ? 'is-danger'" type="text" th:field="*{name}">
-                                    <span class="icon is-small is-left">
-                                        <i class="fas fa-user"></i>
-                                    </span>
-                                </div>
-                                <p class="help is-danger" th:if="${#fields.hasErrors('name')}" th:errors="*{name}"></p>
-                            </div>
-                            
-                            <div class="field">
-                                <label class="label">Phone Number</label>
-                                <div class="control has-icons-left">
-                                    <input class="input" th:classappend="${#fields.hasErrors('phoneNumber')} ? 'is-danger'" type="text" th:field="*{phoneNumber}" placeholder="+1234567890">
-                                    <span class="icon is-small is-left">
-                                        <i class="fas fa-phone"></i>
-                                    </span>
-                                </div>
-                                <p class="help is-danger" th:if="${#fields.hasErrors('phoneNumber')}" th:errors="*{phoneNumber}"></p>
-                            </div>
-                            
-                            <div class="field">
-                                <label class="label">Email Address</label>
-                                <div class="control has-icons-left">
-                                    <input class="input" th:classappend="${#fields.hasErrors('emailAddress')} ? 'is-danger'" type="email" th:field="*{emailAddress}">
-                                    <span class="icon is-small is-left">
-                                        <i class="fas fa-envelope"></i>
-                                    </span>
-                                </div>
-                                <p class="help is-danger" th:if="${#fields.hasErrors('emailAddress')}" th:errors="*{emailAddress}"></p>
-                            </div>
-                            
-                            <div class="field">
-                                <label class="label">Username</label>
-                                <div class="control has-icons-left">
-                                    <input class="input" th:classappend="${#fields.hasErrors('username')} ? 'is-danger'" type="text" th:field="*{username}">
-                                    <span class="icon is-small is-left">
-                                        <i class="fas fa-user-circle"></i>
-                                    </span>
-                                </div>
-                                <p class="help is-danger" th:if="${#fields.hasErrors('username')}" th:errors="*{username}"></p>
-                            </div>
-                            
-                            <div class="field">
-                                <label class="label">Password</label>
-                                <div class="control has-icons-left">
-                                    <input class="input" th:classappend="${#fields.hasErrors('password')} ? 'is-danger'" type="password" th:field="*{password}">
-                                    <span class="icon is-small is-left">
-                                        <i class="fas fa-lock"></i>
-                                    </span>
-                                </div>
-                                <p class="help is-danger" th:if="${#fields.hasErrors('password')}" th:errors="*{password}"></p>
-                            </div>
-                            
-                            <div class="field">
-                                <label class="label">Blood Group</label>
-                                <div class="control has-icons-left">
-                                    <input class="input" th:classappend="${#fields.hasErrors('bloodGroup')} ? 'is-danger'" type="text" th:field="*{bloodGroup}" placeholder="A+, B-, O+, AB+">
-                                    <span class="icon is-small is-left">
-                                        <i class="fas fa-tint"></i>
-                                    </span>
-                                </div>
-                                <p class="help is-danger" th:if="${#fields.hasErrors('bloodGroup')}" th:errors="*{bloodGroup}"></p>
-                            </div>
-                            
-                            <div class="field">
-                                <div class="control">
-                                    <button type="submit" class="button is-light-blue is-fullwidth">Register</button>
-                                </div>
-                            </div>
-                        </form>
-                        <p class="has-text-centered mt-4">
-                            Already have an account? <a th:href="@{/login}">Login here</a>
-                        </p>
+    <div class="container register-container">
+        <div class="card">
+            <div class="card-header bg-primary text-white text-center">
+                <h4 class="mb-0">Create an Account</h4>
+            </div>
+            <div class="card-body p-4">
+                <div th:if="${errorMessage}" class="alert alert-danger">
+                    <i class="fas fa-exclamation-circle me-2"></i><span th:text="${errorMessage}"></span>
+                </div>
+                
+                <form th:action="@{/register}" th:object="${user}" method="post">
+                    <div class="mb-3">
+                        <label for="role" class="form-label">Account Type</label>
+                        <select class="form-select" th:field="*{role}" id="role" onchange="toggleDoctorFields()">
+                            <option th:value="${T(com.healthvault.ehv.model.User.Role).PATIENT}">Patient</option>
+                            <option th:value="${T(com.healthvault.ehv.model.User.Role).DOCTOR}">Doctor</option>
+                        </select>
+                        <div class="invalid-feedback" th:if="${#fields.hasErrors('role')}" th:errors="*{role}"></div>
                     </div>
+                    
+                    <div class="mb-3">
+                        <label for="name" class="form-label">Full Name</label>
+                        <div class="input-group">
+                            <span class="input-group-text"><i class="fas fa-user"></i></span>
+                            <input type="text" class="form-control" th:classappend="${#fields.hasErrors('name')} ? 'is-invalid'" 
+                                   id="name" th:field="*{name}">
+                            <div class="invalid-feedback" th:if="${#fields.hasErrors('name')}" th:errors="*{name}"></div>
+                        </div>
+                    </div>
+                    
+                    <div class="mb-3">
+                        <label for="phoneNumber" class="form-label">Phone Number</label>
+                        <div class="input-group">
+                            <span class="input-group-text"><i class="fas fa-phone"></i></span>
+                            <input type="text" class="form-control" th:classappend="${#fields.hasErrors('phoneNumber')} ? 'is-invalid'" 
+                                   id="phoneNumber" th:field="*{phoneNumber}" placeholder="+1234567890">
+                            <div class="invalid-feedback" th:if="${#fields.hasErrors('phoneNumber')}" th:errors="*{phoneNumber}"></div>
+                        </div>
+                    </div>
+                    
+                    <div class="mb-3">
+                        <label for="emailAddress" class="form-label">Email Address</label>
+                        <div class="input-group">
+                            <span class="input-group-text"><i class="fas fa-envelope"></i></span>
+                            <input type="email" class="form-control" th:classappend="${#fields.hasErrors('emailAddress')} ? 'is-invalid'" 
+                                   id="emailAddress" th:field="*{emailAddress}">
+                            <div class="invalid-feedback" th:if="${#fields.hasErrors('emailAddress')}" th:errors="*{emailAddress}"></div>
+                        </div>
+                    </div>
+                    
+                    <div class="mb-3">
+                        <label for="username" class="form-label">Username</label>
+                        <div class="input-group">
+                            <span class="input-group-text"><i class="fas fa-user-circle"></i></span>
+                            <input type="text" class="form-control" th:classappend="${#fields.hasErrors('username')} ? 'is-invalid'" 
+                                   id="username" th:field="*{username}">
+                            <div class="invalid-feedback" th:if="${#fields.hasErrors('username')}" th:errors="*{username}"></div>
+                        </div>
+                    </div>
+                    
+                    <div class="mb-3">
+                        <label for="password" class="form-label">Password</label>
+                        <div class="input-group">
+                            <span class="input-group-text"><i class="fas fa-lock"></i></span>
+                            <input type="password" class="form-control" th:classappend="${#fields.hasErrors('password')} ? 'is-invalid'" 
+                                   id="password" th:field="*{password}">
+                            <div class="invalid-feedback" th:if="${#fields.hasErrors('password')}" th:errors="*{password}"></div>
+                        </div>
+                    </div>
+                    
+                    <div class="mb-3">
+                        <label for="bloodGroup" class="form-label">Blood Group</label>
+                        <div class="input-group">
+                            <span class="input-group-text"><i class="fas fa-tint"></i></span>
+                            <input type="text" class="form-control" th:classappend="${#fields.hasErrors('bloodGroup')} ? 'is-invalid'" 
+                                   id="bloodGroup" th:field="*{bloodGroup}" placeholder="A+, B-, O+, AB+">
+                            <div class="invalid-feedback" th:if="${#fields.hasErrors('bloodGroup')}" th:errors="*{bloodGroup}"></div>
+                        </div>
+                    </div>
+                    
+                    <!-- Doctor-specific fields -->
+                    <div id="doctorFields" style="display: none;">
+                        <div class="mb-3">
+                            <label for="licenseNumber" class="form-label">License Number</label>
+                            <div class="input-group">
+                                <span class="input-group-text"><i class="fas fa-id-card"></i></span>
+                                <input type="text" class="form-control" th:classappend="${#fields.hasErrors('licenseNumber')} ? 'is-invalid'" 
+                                       id="licenseNumber" th:field="*{licenseNumber}">
+                                <div class="invalid-feedback" th:if="${#fields.hasErrors('licenseNumber')}" th:errors="*{licenseNumber}"></div>
+                            </div>
+                        </div>
+                        
+                        <div class="mb-3">
+                            <label for="specialty" class="form-label">Specialty</label>
+                            <div class="input-group">
+                                <span class="input-group-text"><i class="fas fa-stethoscope"></i></span>
+                                <input type="text" class="form-control" th:classappend="${#fields.hasErrors('specialty')} ? 'is-invalid'" 
+                                       id="specialty" th:field="*{specialty}">
+                                <div class="invalid-feedback" th:if="${#fields.hasErrors('specialty')}" th:errors="*{specialty}"></div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="d-grid">
+                        <button type="submit" class="btn btn-primary">
+                            <i class="fas fa-user-plus me-2"></i>Register
+                        </button>
+                    </div>
+                </form>
+                
+                <div class="text-center mt-4">
+                    <p>Already have an account? <a th:href="@{/login}" class="text-decoration-none">Login here</a></p>
                 </div>
             </div>
         </div>
-    </section>
+    </div>
 
-    <script th:replace="~{fragments :: navbar-script}"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.2/js/bootstrap.bundle.min.js"></script>
+    
+    <script>
+        function toggleDoctorFields() {
+            var role = document.getElementById('role').value;
+            var doctorFields = document.getElementById('doctorFields');
+            
+            if (role === 'DOCTOR') {
+                doctorFields.style.display = 'block';
+            } else {
+                doctorFields.style.display = 'none';
+            }
+        }
+        
+        // Initial toggle on page load
+        document.addEventListener('DOMContentLoaded', function() {
+            toggleDoctorFields();
+        });
+    </script>
 </body>
 </html>

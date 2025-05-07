@@ -1,74 +1,85 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
-<head th:replace="~{fragments :: head('Lab Test Analysis - HealthVault')}"></head>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lab Test Analysis - HealthVault</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.2/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+    <style>
+        .analysis-container {
+            max-width: 900px;
+            margin: 30px auto;
+        }
+        .card {
+            border-radius: 10px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+            margin-bottom: 20px;
+        }
+        .card-header {
+            border-top-left-radius: 10px !important;
+            border-top-right-radius: 10px !important;
+        }
+        .findings-section {
+            background-color: #f8f9fa;
+            border-radius: 8px;
+            padding: 15px;
+            margin-bottom: 20px;
+        }
+    </style>
+</head>
 <body>
-    <div th:replace="~{fragments :: nav}"></div>
+    <!-- Header Fragment -->
+    <div th:replace="~{fragments :: header}"></div>
     
-    <section class="section">
-        <div class="container">
-            <div class="columns">
-                <div class="column is-8 is-offset-2">
-                    <nav class="breadcrumb" aria-label="breadcrumbs">
-                        <ul>
-                            <li><a th:href="@{/dashboard}">Dashboard</a></li>
-                            <li class="is-active"><a href="#" aria-current="page">Analysis</a></li>
-                        </ul>
-                    </nav>
-
-                    <div class="card">
-                        <header class="card-header">
-                            <p class="card-header-title">
-                                Lab Test Analysis - <span th:text="${labTest.laboratoryName}"></span>
-                            </p>
-                        </header>
-                        <div class="card-content">
-                            <div class="content">
-                                <h3 class="title is-4">Test Details</h3>
-                                <div class="box">
-                                    <div th:each="detail, stat : ${labTest.testDetails}" class="mb-5">
-                                        <p class="subtitle is-5 mb-2" th:text="${detail.testName}">Test Name</p>
-                                        <p class="has-text-grey" th:text="${detail.description}">Description</p>
-                                        <hr th:if="${!stat.last}" class="my-4">
-                                    </div>
-                                </div>
-
-                                <h3 class="title is-4 mt-5">Key Findings</h3>
-                                <div class="box">
-                                    <div class="content has-text-left">
-                                        <pre style="background: none; border: none; padding: 0; font-family: inherit; white-space: pre-wrap;" th:text="${analysis.analysis}">Analysis content</pre>
-                                    </div>
-                                </div>
-
-                                <h3 class="title is-4 mt-5">Recommendations</h3>
-                                <div class="box">
-                                    <div class="content has-text-left">
-                                        <pre style="background: none; border: none; padding: 0; font-family: inherit; white-space: pre-wrap;" th:text="${analysis.suggestions}">Suggestions content</pre>
-                                    </div>
-                                </div>
-
-                                <p class="has-text-grey is-size-7 mt-4">
-                                    Report generated on: <span th:text="${#temporals.format(analysis.createdAt, 'dd-MM-yyyy HH:mm')}">Date</span>
-                                </p>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="buttons is-centered mt-5">
-                        <a th:href="@{/dashboard}" class="button is-light">
-                            Back to Dashboard
-                        </a>
-                        <a th:href="@{/lab-tests/download/{id}(id=${labTest.id})}" class="button is-primary">
-                            <span class="icon">
-                                <i class="fas fa-download"></i>
-                            </span>
-                            <span>Download PDF</span>
-                        </a>
+    <div class="container analysis-container">
+        <nav aria-label="breadcrumb" class="mb-4">
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item"><a th:href="@{/dashboard}">Dashboard</a></li>
+                <li class="breadcrumb-item active" aria-current="page">Analysis</li>
+            </ol>
+        </nav>
+        
+        <div class="card mb-4">
+            <div class="card-header bg-primary text-white">
+                <h4 class="mb-0"><i class="fas fa-chart-line me-2"></i>Lab Test Analysis - <span th:text="${labTest.laboratoryName}"></span></h4>
+            </div>
+            <div class="card-body">
+                <h5 class="card-title mb-3">Test Details</h5>
+                <div class="findings-section">
+                    <div th:each="detail, stat : ${labTest.testDetails}" class="mb-4">
+                        <h6 class="mb-2" th:text="${detail.testName}">Test Name</h6>
+                        <p class="text-muted mb-0" th:text="${detail.description}">Description</p>
+                        <hr th:if="${!stat.last}" class="my-3">
                     </div>
                 </div>
+                
+                <h5 class="card-title mb-3 mt-4">Key Findings</h5>
+                <div class="findings-section">
+                    <p class="mb-0" th:text="${analysis.analysis}">Analysis content</p>
+                </div>
+                
+                <h5 class="card-title mb-3 mt-4">Recommendations</h5>
+                <div class="findings-section">
+                    <p class="mb-0" th:text="${analysis.suggestions}">Suggestions content</p>
+                </div>
+                
+                <p class="text-muted small mt-3">
+                    Report generated on: <span th:text="${#temporals.format(analysis.createdAt, 'dd-MM-yyyy HH:mm')}">Date</span>
+                </p>
             </div>
         </div>
-    </section>
-
-    <script th:replace="~{fragments :: navbar-script}"></script>
+        
+        <div class="d-flex justify-content-center gap-3 mt-4">
+            <a th:href="@{/dashboard}" class="btn btn-secondary">
+                <i class="fas fa-arrow-left me-1"></i> Back to Dashboard
+            </a>
+            <a th:href="@{/lab-tests/download/{id}(id=${labTest.id})}" class="btn btn-primary">
+                <i class="fas fa-download me-1"></i> Download PDF
+            </a>
+        </div>
+    </div>
+    
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.2/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>

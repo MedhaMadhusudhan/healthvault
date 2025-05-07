@@ -1,52 +1,83 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
-<head th:replace="~{fragments :: head('Add Lab Test - HealthVault')}"></head>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Add Lab Test - HealthVault</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.2/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+    <style>
+        .container {
+            max-width: 800px;
+            margin: 30px auto;
+        }
+        .card {
+            border-radius: 10px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+            margin-bottom: 20px;
+        }
+        .card-header {
+            border-top-left-radius: 10px !important;
+            border-top-right-radius: 10px !important;
+        }
+        .test-detail-entry {
+            background-color: #f8f9fa;
+            border-radius: 8px;
+            padding: 15px;
+            margin-bottom: 20px;
+        }
+    </style>
+</head>
 <body>
-    <div th:replace="~{fragments :: nav}"></div>
+    <!-- Header Fragment -->
+    <div th:replace="~{fragments :: header}"></div>
     
-    <section class="section">
-        <div class="container">
-            <h2 class="title is-3">Add New Lab Test</h2>
-            <form th:action="@{/lab-tests/save}" th:object="${labTest}" method="post" id="labTestForm">
-                <div class="field">
-                    <label class="label" for="laboratoryName">Laboratory Name</label>
-                    <div class="control">
-                        <input class="input" type="text" id="laboratoryName" th:field="*{laboratoryName}" required>
+    <div class="container">
+        <h2 class="mb-4"><i class="fas fa-flask me-2"></i>Add New Lab Test</h2>
+        <form th:action="@{/lab-tests/save}" th:object="${labTest}" method="post" id="labTestForm">
+            <div class="card mb-4">
+                <div class="card-header bg-primary text-white">
+                    <h4 class="mb-0">Laboratory Information</h4>
+                </div>
+                <div class="card-body">
+                    <div class="mb-3">
+                        <label for="laboratoryName" class="form-label">Laboratory Name</label>
+                        <input type="text" class="form-control" id="laboratoryName" th:field="*{laboratoryName}" required>
                     </div>
                 </div>
-
-                <div id="testDetailsContainer">
-                    <div class="test-detail-entry box">
-                        <h4 class="title is-5">Test Details</h4>
-                        <div class="field">
-                            <label class="label">Test Name</label>
-                            <div class="control">
-                                <input class="input" type="text" name="testDetails[0].testName" required>
-                            </div>
+            </div>
+            
+            <div id="testDetailsContainer">
+                <div class="card test-detail-entry">
+                    <div class="card-header bg-primary text-white d-flex justify-content-between align-items-center">
+                        <h4 class="mb-0">Test Details</h4>
+                    </div>
+                    <div class="card-body">
+                        <div class="mb-3">
+                            <label class="form-label">Test Name</label>
+                            <input type="text" class="form-control" name="testDetails[0].testName" required>
                         </div>
-                        <div class="field">
-                            <label class="label">Description</label>
-                            <div class="control">
-                                <textarea class="textarea" name="testDetails[0].description" rows="3"></textarea>
-                            </div>
+                        <div class="mb-3">
+                            <label class="form-label">Description</label>
+                            <textarea class="form-control" name="testDetails[0].description" rows="3"></textarea>
                         </div>
                     </div>
                 </div>
+            </div>
 
-                <div class="field is-grouped mt-5">
-                    <div class="control">
-                        <button type="button" class="button is-info" onclick="addTestDetail()">Add Another Test</button>
-                    </div>
-                    <div class="control">
-                        <button type="submit" class="button is-primary">Save Lab Test</button>
-                    </div>
-                    <div class="control">
-                        <a th:href="@{/dashboard}" class="button is-light">Cancel</a>
-                    </div>
-                </div>
-            </form>
-        </div>
-    </section>
+            <div class="d-flex gap-2 mt-4">
+                <button type="button" class="btn btn-info text-white" onclick="addTestDetail()">
+                    <i class="fas fa-plus me-1"></i> Add Another Test
+                </button>
+                <button type="submit" class="btn btn-primary">
+                    <i class="fas fa-save me-1"></i> Save Lab Test
+                </button>
+                <a th:href="@{/dashboard}" class="btn btn-secondary">
+                    <i class="fas fa-times me-1"></i> Cancel
+                </a>
+            </div>
+        </form>
+    </div>
 
     <script>
         let testDetailCount = 1;
@@ -54,22 +85,20 @@
         function addTestDetail() {
             const container = document.getElementById('testDetailsContainer');
             const newEntry = document.createElement('div');
-            newEntry.className = 'test-detail-entry box mt-5';
+            newEntry.className = 'card test-detail-entry mt-4';
             newEntry.innerHTML = `
-                <div class="is-flex is-justify-content-space-between">
-                    <h4 class="title is-5">Test Details</h4>
-                    <button type="button" class="delete" onclick="removeTestDetail(this)"></button>
+                <div class="card-header bg-primary text-white d-flex justify-content-between align-items-center">
+                    <h4 class="mb-0">Test Details</h4>
+                    <button type="button" class="btn-close btn-close-white" onclick="removeTestDetail(this)"></button>
                 </div>
-                <div class="field">
-                    <label class="label">Test Name</label>
-                    <div class="control">
-                        <input class="input" type="text" name="testDetails[${testDetailCount}].testName" required>
+                <div class="card-body">
+                    <div class="mb-3">
+                        <label class="form-label">Test Name</label>
+                        <input type="text" class="form-control" name="testDetails[${testDetailCount}].testName" required>
                     </div>
-                </div>
-                <div class="field">
-                    <label class="label">Description</label>
-                    <div class="control">
-                        <textarea class="textarea" name="testDetails[${testDetailCount}].description" rows="3"></textarea>
+                    <div class="mb-3">
+                        <label class="form-label">Description</label>
+                        <textarea class="form-control" name="testDetails[${testDetailCount}].description" rows="3"></textarea>
                     </div>
                 </div>
             `;
@@ -81,5 +110,7 @@
             button.closest('.test-detail-entry').remove();
         }
     </script>
+    
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.2/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>

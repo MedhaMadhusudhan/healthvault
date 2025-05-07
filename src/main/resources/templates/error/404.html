@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Page Not Found - HealthVault</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.2/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+    <style>
+        .error-container {
+            max-width: 800px;
+            margin: 50px auto;
+        }
+        .card {
+            border-radius: 10px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+        }
+        .card-header {
+            border-top-left-radius: 10px !important;
+            border-top-right-radius: 10px !important;
+        }
+        .error-image {
+            max-width: 250px;
+            margin: 20px auto;
+            display: block;
+        }
+    </style>
+</head>
+<body>
+    <!-- Simplified navbar for error page -->
+    <nav class="navbar navbar-expand-lg navbar-light bg-light shadow-sm">
+        <div class="container">
+            <a class="navbar-brand fw-bold" href="/login">HealthVault</a>
+        </div>
+    </nav>
+
+    <div class="container error-container">
+        <div class="card">
+            <div class="card-header bg-warning text-white">
+                <h4 class="mb-0"><i class="fas fa-exclamation-triangle me-2"></i>Page Not Found</h4>
+            </div>
+            <div class="card-body text-center">
+                <img src="https://cdn-icons-png.flaticon.com/512/6195/6195678.png" alt="404 Page Not Found" class="error-image">
+                <h3 class="mt-4">Oops! Page Not Found</h3>
+                <p class="lead">We couldn't find the page you were looking for.</p>
+                <p class="mb-4">The page may have been moved, deleted, or never existed.</p>
+                
+                <div class="d-flex justify-content-center">
+                    <a href="/dashboard" class="btn btn-primary me-2">
+                        <i class="fas fa-home me-1"></i> Go to Dashboard
+                    </a>
+                    <a href="/login" class="btn btn-outline-primary">
+                        <i class="fas fa-sign-in-alt me-1"></i> Login Page
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.2/js/bootstrap.bundle.min.js"></script>
+</body>
+</html> 

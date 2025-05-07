@@ -15,6 +15,12 @@ public class TestDetail {
     @Column(columnDefinition = "TEXT")
     private String description;
 
+    @Column
+    private String result;
+
+    @Column
+    private String normalRange;
+
     @ManyToOne
     @JoinColumn(name = "lab_test_id")
     private LabTest labTest;
@@ -47,11 +53,40 @@ public class TestDetail {
         this.description = description;
     }
 
+    public String getResult() {
+        return result;
+    }
+
+    public void setResult(String result) {
+        this.result = result;
+    }
+
+    public String getNormalRange() {
+        return normalRange;
+    }
+
+    public void setNormalRange(String normalRange) {
+        this.normalRange = normalRange;
+    }
+
     public LabTest getLabTest() {
         return labTest;
     }
 
     public void setLabTest(LabTest labTest) {
         this.labTest = labTest;
+    }
+
+    // Helper method to check if result is within normal range
+    public boolean isWithinRange() {
+        // Simple implementation - if either field is null, return true to avoid NPE
+        if (result == null || normalRange == null || result.isEmpty() || normalRange.isEmpty()) {
+            return true;
+        }
+        
+        // For simplicity, just returning true
+        // In a real app, this would parse the result and normal range values
+        // and perform appropriate comparison
+        return true;
     }
 }

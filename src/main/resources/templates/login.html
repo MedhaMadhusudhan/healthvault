@@ -1,68 +1,84 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
-<head th:replace="~{fragments :: head('Login - HealthVault')}"></head>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login - HealthVault</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.2/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+    <style>
+        .login-container {
+            max-width: 500px;
+            margin: 50px auto;
+        }
+        .card {
+            border-radius: 10px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+        }
+        .card-header {
+            border-top-left-radius: 10px !important;
+            border-top-right-radius: 10px !important;
+        }
+    </style>
+</head>
 <body>
-    <nav class="navbar is-light-blue" role="navigation" aria-label="main navigation">
-        <div class="navbar-brand">
-            <a class="navbar-item" href="/">
-                <strong>HealthVault</strong>
-            </a>
+    <!-- Use simple navbar for login page -->
+    <nav class="navbar navbar-expand-lg navbar-light bg-light shadow-sm">
+        <div class="container">
+            <a class="navbar-brand fw-bold" th:href="@{/}">HealthVault</a>
         </div>
     </nav>
 
-    <section class="section">
-        <div class="container">
-            <div class="columns is-centered">
-                <div class="column is-half">
-                    <div class="box">
-                        <h2 class="title is-3 has-text-centered">Login</h2>
-                        
-                        <div th:if="${param.error}" class="notification is-danger">
-                            Invalid username or password.
+    <div class="container login-container">
+        <div class="card">
+            <div class="card-header bg-primary text-white text-center">
+                <h4 class="mb-0">Login</h4>
+            </div>
+            <div class="card-body p-4">
+                <div th:if="${param.error}" class="alert alert-danger">
+                    <i class="fas fa-exclamation-circle me-2"></i>Invalid username or password.
+                </div>
+                <div th:if="${param.logout}" class="alert alert-success">
+                    <i class="fas fa-check-circle me-2"></i>You have been logged out.
+                </div>
+                <div th:if="${param.expired}" class="alert alert-warning">
+                    <i class="fas fa-exclamation-triangle me-2"></i>Your session has expired. Please login again.
+                </div>
+                <div th:if="${param.registered}" class="alert alert-success">
+                    <i class="fas fa-check-circle me-2"></i>Registration successful! Please login.
+                </div>
+                
+                <form th:action="@{/login}" method="post">
+                    <div class="mb-3">
+                        <label for="username" class="form-label">Username</label>
+                        <div class="input-group">
+                            <span class="input-group-text"><i class="fas fa-user"></i></span>
+                            <input type="text" class="form-control" id="username" name="username" required>
                         </div>
-                        <div th:if="${param.logout}" class="notification is-success">
-                            You have been logged out.
-                        </div>
-                        <div th:if="${param.expired}" class="notification is-warning">
-                            Your session has expired. Please login again.
-                        </div>
-                        
-                        <form th:action="@{/login}" method="post">
-                            <div class="field">
-                                <label class="label">Username</label>
-                                <div class="control has-icons-left">
-                                    <input class="input" type="text" name="username" required>
-                                    <span class="icon is-small is-left">
-                                        <i class="fas fa-user"></i>
-                                    </span>
-                                </div>
-                            </div>
-                            
-                            <div class="field">
-                                <label class="label">Password</label>
-                                <div class="control has-icons-left">
-                                    <input class="input" type="password" name="password" required>
-                                    <span class="icon is-small is-left">
-                                        <i class="fas fa-lock"></i>
-                                    </span>
-                                </div>
-                            </div>
-                            
-                            <div class="field">
-                                <div class="control">
-                                    <button type="submit" class="button is-light-blue is-fullwidth">Login</button>
-                                </div>
-                            </div>
-                        </form>
-                        <p class="has-text-centered mt-4">
-                            Don't have an account? <a th:href="@{/register}">Register here</a>
-                        </p>
                     </div>
+                    
+                    <div class="mb-3">
+                        <label for="password" class="form-label">Password</label>
+                        <div class="input-group">
+                            <span class="input-group-text"><i class="fas fa-lock"></i></span>
+                            <input type="password" class="form-control" id="password" name="password" required>
+                        </div>
+                    </div>
+                    
+                    <div class="d-grid">
+                        <button type="submit" class="btn btn-primary">
+                            <i class="fas fa-sign-in-alt me-2"></i>Login
+                        </button>
+                    </div>
+                </form>
+                
+                <div class="text-center mt-4">
+                    <p>Don't have an account? <a th:href="@{/register}" class="text-decoration-none">Register here</a></p>
                 </div>
             </div>
         </div>
-    </section>
+    </div>
 
-    <script th:replace="~{fragments :: navbar-script}"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.2/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>
